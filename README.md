@@ -44,7 +44,7 @@ With floating log window updated with key values.
     Klog.runFloating(this)
 ```
 
-- If you want to close when you press the Back button on the "base", insert this cord
+- If you want to close when you press the Back button on the "BaseActivity", insert this cord
 
 ```
     Klog.addBackPressedFloatingClose(this)

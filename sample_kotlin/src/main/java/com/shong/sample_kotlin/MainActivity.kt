@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     private fun testLog() {
         CoroutineScope(Dispatchers.Main).launch {
             Klog.fl("test N", "n", LogLevel.N)
-            Klog.fl("test V", "vVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV", LogLevel.V)
+            Klog.fl("test V", "v", LogLevel.V)
             Klog.fl("test D", "d", LogLevel.D)
             Klog.fl("test I", "i", LogLevel.I)
             Klog.fl("test W", "w", LogLevel.W)
