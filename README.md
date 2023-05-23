@@ -1,16 +1,30 @@
 # Klog
 
-A "custom log class" to help you develop.
+A "custom log class" to help you develop For Android.
 
 With floating log window updated with key values.
 
 ## Get Start
 
-- dependencies
+- dependencies for download jitpack
+
+```
+// settings.gradle
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+- dependencies for library
 
 ```
 // buld.gradle(:app)
-    implementation 'com.github.sHong7512:AARLibraryExample:Tag'
+    implementation 'com.github.sHong7512:AARLibraryExample:0.0.2'
 ```
 
 - Call initalize() if you want to set "searchPoint" and "isShow"
@@ -41,19 +55,38 @@ With floating log window updated with key values.
 - Put the code in your activity (This function includes an permission request)
 
 ```
-    Klog.runFloating(this)
+    Klog.runFloating(activity)
+```
+
+- If you want permission
+
+```
+     Klog.reqPermission(context)
+```
+
+- If you want permission With ActivityResultLauncher
+
+```
+     Klog.reqPermissionWithLauncher(
+            componentActivity,
+            {
+                ...
+                Klog.runFloating(activity)
+            },
+            { ... },
+        )
 ```
 
 - If you want to close when you press the Back button on the "BaseActivity", insert this cord
 
 ```
-    Klog.addBackPressedFloatingClose(this)
+    Klog.addBackPressedFloatingClose(componentActivity)
 ```
 
 - If you want to stop
 
 ```
-    Klog.stopFloating(this)
+    Klog.stopFloating(acivity)
 ```
 
 - Show Log at FLoating Window
@@ -80,12 +113,11 @@ With floating log window updated with key values.
 
 ```
 fun runFloating(
-        activity: ComponentActivity,
+        activity: activity,
         autoStop: Boolean = AUTO_STOP_BASE,
         max: Int = MAX_BASE,
         withActivityLog: Boolean = false,
-        onPermissionOk: () -> Unit = {},
-        onFailure: (String?) -> Unit = {},
+        onFailure: ((String?) -> Unit)?,
     ) 
 ```
 

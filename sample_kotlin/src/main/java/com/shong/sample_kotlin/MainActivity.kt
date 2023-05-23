@@ -21,22 +21,28 @@ class MainActivity : AppCompatActivity() {
         // set base data. if you want to keep show, set true
         Klog.initialize("_sHong", BuildConfig.DEBUG)
 
-        // show floating
-        Klog.runFloating(this)
-        /* if you want to set other options
-        Klog.runFloating(
-            activity = this,
-            autoStop = true,
-            max = 5,
-            withActivityLog = true,
-            onPermissionOk = {
-                Klog.fl(this, "Floating Start Success!", LogLevel.D)
+        // request permission with ActivityResultLauncher
+        Klog.reqPermissionWithLauncher(
+            this,
+            {
+                // show floating
+                Klog.runFloating(this)
+                /* if you want to set other options
+                Klog.runFloating(
+                    activity = this,
+                    autoStop = true,
+                    max = 5,
+                    withActivityLog = true,
+                    onFailure = { e ->
+                        Klog.fl(this, "Floating Error $e", LogLevel.E)
+                    },
+                )
+                */
             },
-            onFailure = { e ->
-                Klog.fl(this, "Floating Error $e", LogLevel.E)
-            },
+            { Klog.e(this, "Permission Denied!!")},
         )
-        */
+
+
 
         // If you want to close when you press the Back button on the "base", insert this cord
         Klog.addBackPressedFloatingClose(this)

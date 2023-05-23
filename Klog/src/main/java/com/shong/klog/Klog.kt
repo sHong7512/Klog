@@ -1,5 +1,6 @@
 package com.shong.klog
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -213,48 +214,71 @@ object Klog {
         }
     }
 
-    fun runFloating(activity: ComponentActivity) {
-        runFloating(activity, AUTO_STOP_BASE, MAX_BASE, false, {}, { _ -> })
+    fun reqPermission(context: Context){
+        if (Settings.canDrawOverlays(context)){
+            Klog.d(this, "permission already allowed")
+            return
+        }
+
+        val intent = Intent(
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Uri.parse("package:${context.packageName}")
+        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+        context.startActivity(intent)
+    }
+    fun reqPermissionWithLauncher(
+        componentActivity: ComponentActivity,
+        onAccepted: (() -> Unit)?,
+        onDenied: (() -> Unit)?,
+    ){
+        if (Settings.canDrawOverlays(componentActivity)){
+            Klog.d(this, "permission already allowed")
+            return
+        }
+
+        val intent = Intent(
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Uri.parse("package:${componentActivity.packageName}")
+        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+        val resultLauncherOverlay = componentActivity.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { _ ->
+            if (Settings.canDrawOverlays(componentActivity)) {
+                Klog.d(this, "permission request Succeed")
+                onAccepted?.invoke()
+            } else {
+                Klog.w(this, "no permission")
+                onDenied?.invoke()
+            }
+        }
+        resultLauncherOverlay.launch(intent)
+    }
+
+    fun runFloating(activity: Activity) {
+        runFloating(activity, AUTO_STOP_BASE, MAX_BASE, false, { _ -> })
     }
 
     fun runFloating(
-        activity: ComponentActivity,
+        activity: Activity,
         autoStop: Boolean = AUTO_STOP_BASE,
         max: Int = MAX_BASE,
         withActivityLog: Boolean = false,
-        onPermissionOk: () -> Unit = {},
-        onFailure: (String?) -> Unit = {},
+        onFailure: ((String?) -> Unit)?,
     ) {
         if (isShow) {
             try {
                 if (Settings.canDrawOverlays(activity)) {
                     startFloating(activity, autoStop, max, withActivityLog)
                     Klog.d(this, "show Floating Succeed")
-                    onPermissionOk()
                 } else {
-                    val resultLauncherOverlay = activity.registerForActivityResult(
-                        ActivityResultContracts.StartActivityForResult()
-                    ) { _ ->
-                        if (Settings.canDrawOverlays(activity)) {
-                            startFloating(activity, autoStop, max, withActivityLog)
-                            Klog.d(this, "show Floating Succeed")
-                            onPermissionOk()
-                        } else {
-                            Klog.d(this, "not accept permission")
-                            onFailure("not accept permission")
-                        }
-                    }
-
-                    val intent = Intent(
-                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:${activity.packageName}")
-                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-                    resultLauncherOverlay.launch(intent)
+                    Klog.e(this, "Must allowed Overlay Permission")
+                    onFailure?.invoke("Must allowed Overlay Permission")
                 }
             } catch (e: Exception) {
                 Klog.e(this, "Occur Floating Error :  $e")
-                onFailure("Occur Floating Error :  $e")
+                onFailure?.invoke("Occur Floating Error :  $e")
             }
         }
     }
@@ -273,7 +297,7 @@ object Klog {
         }
     }
 
-    fun stopFloating(activity: ComponentActivity) {
+    fun stopFloating(activity: Activity) {
         val intent = Intent(activity, FloatingService::class.java)
         activity.stopService(intent)
         stopActivityLog()
@@ -281,7 +305,7 @@ object Klog {
     }
 
     private fun startFloating(
-        activity: ComponentActivity,
+        activity: Activity,
         autoStop: Boolean,
         max: Int,
         withActivityLog: Boolean

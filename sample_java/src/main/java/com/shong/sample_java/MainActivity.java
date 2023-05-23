@@ -24,20 +24,22 @@ public class MainActivity extends AppCompatActivity {
         // set base data. if you want to keep show, set true
         log.initialize("_sHong", BuildConfig.DEBUG);
 
-        // show floating
-        log.runFloating(this);
-        /* if you want to set other options
-        final Function0 onPermissionOk = (Function0) () -> {
-            // ...
-            return Unit.INSTANCE;
-        };
+        final Function0 onAccepted = (Function0) () -> {
+            // show floating
+            log.runFloating(this);
 
-        final Function1 onFailure = (Function1) (str) -> {
-            // ...
+            /* if you want to set other options
+            final Function1 onFailure = (Function1) (str) -> {
+                // ...
+                return Unit.INSTANCE;
+            };
+            log.runFloating(this, true, 10, true, onFailure);
+            */
+
             return Unit.INSTANCE;
         };
-        log.runFloating(this, true, 10, true, onPermissionOk, onFailure);
-        */
+        // request permission with ActivityResultLauncher
+        log.reqPermissionWithLauncher((ComponentActivity) this, onAccepted, null);
 
         // If you want to close when you press the Back button on the "base", insert this cord
         log.addBackPressedFloatingClose((ComponentActivity) this);
