@@ -14,22 +14,22 @@
         android:text="D"
         android:textColor="#ffffff"
         android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/keyLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/keyLayout"
-        app:layout_constraintBottom_toBottomOf="@id/keyLayout" />
+        app:layout_constraintTop_toTopOf="@id/keyLayout" />
 
     <TextView
         android:id="@+id/spaceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text=" "
         android:includeFontPadding="false"
+        android:text=" "
         android:textColor="#000000"
         android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/keyLayout"
         app:layout_constraintStart_toEndOf="@id/levelTextView"
-        app:layout_constraintTop_toTopOf="@id/keyLayout"
-        app:layout_constraintBottom_toBottomOf="@id/keyLayout" />
+        app:layout_constraintTop_toTopOf="@id/keyLayout" />
 
     <LinearLayout
         android:id="@+id/keyLayout"
@@ -45,9 +45,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="middle"
+            android:includeFontPadding="false"
             android:maxLines="1"
             android:text="key"
-            android:includeFontPadding="false"
             android:textColor="#000000"
             android:textSize="11sp" />
 
@@ -56,9 +56,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="start"
+            android:includeFontPadding="false"
             android:maxLines="1"
             android:text="HH:mm:ss.SSS"
-            android:includeFontPadding="false"
             android:textColor="#666666"
             android:textSize="11sp" />
 
@@ -69,25 +69,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center|top"
+        android:includeFontPadding="false"
         android:text=" : "
         android:textColor="#000000"
         android:textSize="11sp"
-        android:includeFontPadding="false"
+        app:layout_constraintBottom_toBottomOf="@id/keyLayout"
         app:layout_constraintEnd_toStartOf="@id/valueTextView"
-        app:layout_constraintTop_toTopOf="@id/keyLayout"
-        app:layout_constraintBottom_toBottomOf="@id/keyLayout" />
+        app:layout_constraintTop_toTopOf="@id/keyLayout" />
 
     <TextView
         android:id="@+id/valueTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:includeFontPadding="false"
         android:text="value"
         android:textColor="#000000"
         android:textSize="11sp"
-        android:includeFontPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintWidth_percent="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

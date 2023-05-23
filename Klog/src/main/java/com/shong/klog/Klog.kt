@@ -19,6 +19,14 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
+/**
+ *
+ * A "custom log class" to help you develop.
+ *
+ * @author SoonHong Kwon <ksksh7512@gmail.com>
+ * @since 2023.05.23
+ * @see Log, Flow, WindowManager, ForegroundService
+ */
 object Klog {
     private var isShow = true
     internal const val AUTO_STOP_BASE = true
@@ -106,26 +114,39 @@ object Klog {
     fun f(any: Any, msg: String) =
         showWithFloat(any.javaClass.simpleName, msg, timeMillis = System.currentTimeMillis())
 
-    fun f(any: Any, msg: String, thr: Throwable?) =
-        showWithFloat(any.javaClass.simpleName, msg + "\n" + thr, timeMillis = System.currentTimeMillis())
+    fun f(any: Any, msg: String, thr: Throwable?) {
+        var str = msg
+        if (msg.isNotEmpty() && thr != null && thr.toString().isNotEmpty()) str += "\n"
+        showWithFloat(any.javaClass.simpleName, str + thr, timeMillis = System.currentTimeMillis())
+    }
 
     fun f(tag: String, msg: String) =
         showWithFloat(tag, msg, timeMillis = System.currentTimeMillis())
 
-    fun f(tag: String, msg: String, thr: Throwable?) =
-        showWithFloat(tag, msg + "\n" + thr, timeMillis = System.currentTimeMillis())
-
-    fun fl(tag: String, msg: String, thr: Throwable?, logLevel: LogLevel = LogLevel.D) =
-        showWithFloat(tag, msg + "\n" + thr, logLevel, System.currentTimeMillis())
+    fun f(tag: String, msg: String, thr: Throwable?) {
+        var str = msg
+        if (msg.isNotEmpty() && thr != null && thr.toString().isNotEmpty()) str += "\n"
+        showWithFloat(tag, str + thr, timeMillis = System.currentTimeMillis())
+    }
 
     fun fl(any: Any, msg: String, logLevel: LogLevel = LogLevel.D) =
         showWithFloat(any.javaClass.simpleName, msg, logLevel, System.currentTimeMillis())
 
-    fun fl(any: Any, msg: String, thr: Throwable?, logLevel: LogLevel = LogLevel.D) =
-        showWithFloat(any.javaClass.simpleName, msg + "\n" + thr, logLevel, System.currentTimeMillis())
+    fun fl(any: Any, msg: String, thr: Throwable?, logLevel: LogLevel = LogLevel.D) {
+        var str = msg
+        if (msg.isNotEmpty() && thr != null && thr.toString().isNotEmpty()) str += "\n"
+        showWithFloat(any.javaClass.simpleName, str + thr, logLevel, System.currentTimeMillis())
+    }
 
     fun fl(tag: String, msg: String, logLevel: LogLevel = LogLevel.D) =
         showWithFloat(tag, msg, logLevel, System.currentTimeMillis())
+
+    fun fl(tag: String, msg: String, thr: Throwable?, logLevel: LogLevel = LogLevel.D) {
+        var str = msg
+        if (msg.isNotEmpty() && thr != null && thr.toString().isNotEmpty()) str += "\n"
+        showWithFloat(tag, str + thr, logLevel, System.currentTimeMillis())
+    }
+
 
     private fun show(tag: String, msg: String, level: LogLevel) {
         if (isShow) {
@@ -153,7 +174,12 @@ object Klog {
         }
     }
 
-    private fun showWithFloat(key: String, value: String, logLevel: LogLevel = LogLevel.D, timeMillis: Long) {
+    private fun showWithFloat(
+        key: String,
+        value: String,
+        logLevel: LogLevel = LogLevel.D,
+        timeMillis: Long
+    ) {
         if (isShow) {
             show(key + SEARCH_POINT, value, logLevel)
             runBlocking {
@@ -188,7 +214,7 @@ object Klog {
     }
 
     fun runFloating(activity: ComponentActivity) {
-        runFloating(activity, AUTO_STOP_BASE, MAX_BASE, false, {},{ _ -> })
+        runFloating(activity, AUTO_STOP_BASE, MAX_BASE, false, {}, { _ -> })
     }
 
     fun runFloating(
@@ -199,7 +225,7 @@ object Klog {
         onPermissionOk: () -> Unit = {},
         onFailure: (String?) -> Unit = {},
     ) {
-        if(isShow){
+        if (isShow) {
             try {
                 if (Settings.canDrawOverlays(activity)) {
                     startFloating(activity, autoStop, max, withActivityLog)
@@ -234,7 +260,7 @@ object Klog {
     }
 
     fun addBackPressedFloatingClose(activity: ComponentActivity) {
-        if(isShow){
+        if (isShow) {
             // onBackPressed is >= sdk33 deprecated
             val callback = object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -254,11 +280,17 @@ object Klog {
         Klog.d(this, "stopFloating")
     }
 
-    private fun startFloating(activity: ComponentActivity, autoStop: Boolean, max: Int, withActivityLog: Boolean) {
+    private fun startFloating(
+        activity: ComponentActivity,
+        autoStop: Boolean,
+        max: Int,
+        withActivityLog: Boolean
+    ) {
         _logFlow = MutableSharedFlow(
-                replay = max,
-                extraBufferCapacity = max,
-                onBufferOverflow = BufferOverflow.DROP_OLDEST)
+            replay = max,
+            extraBufferCapacity = max,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
         logFlow = _logFlow!!.asSharedFlow()
 
         val intent = Intent(activity, FloatingService::class.java).apply {
@@ -272,19 +304,19 @@ object Klog {
             activity.startService(intent)
         }
 
-        if(withActivityLog) addActivityLog(activity, 100)
+        if (withActivityLog) addActivityLog(activity, 100)
         else stopActivityLog()
     }
 
     private var actLogJob: Job? = null
-    private fun addActivityLog(context: Context, searchMillis: Long){
+    private fun addActivityLog(context: Context, searchMillis: Long) {
         actLogJob?.cancel()
         actLogJob = CoroutineScope(Dispatchers.Main).launch {
             activityFlow(context, searchMillis).collect()
         }
     }
 
-    private fun stopActivityLog(){
+    private fun stopActivityLog() {
         actLogJob?.cancel()
     }
 
@@ -298,6 +330,7 @@ object Klog {
                 lastLog[key] = value
             }
         }
+
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         while (true) {
             for (i in 0 until manager.appTasks.size) {
@@ -319,7 +352,7 @@ object Klog {
             }
 
             if (isUpdated) {
-                for(l in lastLog){
+                for (l in lastLog) {
                     Klog.f(l.key, l.value)
                 }
                 isUpdated = false

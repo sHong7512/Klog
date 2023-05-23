@@ -11,7 +11,7 @@ internal class FloatingService : Service() {
         TODO("Not yet implemented")
     }
 
-    private var floatingLoggerMaker : FloatingLoggerMaker? = null
+    private var floatingLoggerMaker: FloatingLoggerMaker? = null
     override fun onCreate() {
         super.onCreate()
         floatingLoggerMaker = FloatingLoggerMaker(this.baseContext)
@@ -22,7 +22,8 @@ internal class FloatingService : Service() {
             startForeground(SERVICE_NOTI_ID, NotificationMaker(this.baseContext).builder())
         }
 
-        val autoStop = intent?.getBooleanExtra("autoStop", Klog.AUTO_STOP_BASE) ?: Klog.AUTO_STOP_BASE
+        val autoStop =
+            intent?.getBooleanExtra("autoStop", Klog.AUTO_STOP_BASE) ?: Klog.AUTO_STOP_BASE
         val max = intent?.getIntExtra("max", Klog.MAX_BASE) ?: Klog.MAX_BASE
         floatingLoggerMaker?.makeWindow(autoStop, max)
 

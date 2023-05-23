@@ -21,18 +21,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        log.initialize("_sHong", BuildConfig.DEBUG); // if you want to keep show, set true
+        // set base data. if you want to keep show, set true
+        log.initialize("_sHong", BuildConfig.DEBUG);
+
+        // show floating
         log.runFloating(this);
-//        final Function0 onPermissionOk = (Function0) () -> {
-//            /* TODO */
-//            return Unit.INSTANCE;
-//        };
-//
-//        final Function1 onFailure = (Function1) (str) -> {
-//            /* TODO */
-//            return Unit.INSTANCE;
-//        };
-//        log.runFloating(this, true, 10, false, onPermissionOk, onFailure);
+        /* if you want to set other options
+        final Function0 onPermissionOk = (Function0) () -> {
+            // ...
+            return Unit.INSTANCE;
+        };
+
+        final Function1 onFailure = (Function1) (str) -> {
+            // ...
+            return Unit.INSTANCE;
+        };
+        log.runFloating(this, true, 10, true, onPermissionOk, onFailure);
+        */
+
+        // If you want to close when you press the Back button on the "base", insert this cord
         log.addBackPressedFloatingClose((ComponentActivity) this);
 
         findViewById(R.id.goMain2Button).setOnClickListener(new View.OnClickListener() {
@@ -68,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 Thread.sleep(1000);
                 throw new RuntimeException();
             } catch (Exception e) {
-                log.fl(this, "v", e, LogLevel.E);
-                e.printStackTrace();
+                log.fl(this, "make exception test", e, LogLevel.E);
+//                e.printStackTrace();
             }
         }
     }

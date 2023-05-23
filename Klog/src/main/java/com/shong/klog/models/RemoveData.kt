@@ -1,6 +1,6 @@
 package com.shong.klog.models
 
-internal enum class RemoveMode{
+internal enum class RemoveMode {
     All,
     Key,
     Contain,

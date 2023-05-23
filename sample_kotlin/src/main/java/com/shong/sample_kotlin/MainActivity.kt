@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.shong.klog.BuildConfig
 import com.shong.klog.Klog
 import com.shong.klog.models.LogLevel
 import kotlinx.coroutines.CoroutineScope
@@ -17,20 +18,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Klog.initialize("_sHong", true) // or BuildConfig.DEBUG
+        // set base data. if you want to keep show, set true
+        Klog.initialize("_sHong", BuildConfig.DEBUG)
+
+        // show floating
         Klog.runFloating(this)
-//        Klog.runFloating(
-//            activity = this,
-//            autoStop = true,
-//            max = 5,
-//            withActivityLog = false,
-//            onPermissionOk = {
-//                Klog.fl(this, "Floating Start Success!", LogLevel.D)
-//            },
-//            onFailure = { e ->
-//                Klog.fl(this, "Floating Error $e", LogLevel.E)
-//            },
-//        )
+        /* if you want to set other options
+        Klog.runFloating(
+            activity = this,
+            autoStop = true,
+            max = 5,
+            withActivityLog = true,
+            onPermissionOk = {
+                Klog.fl(this, "Floating Start Success!", LogLevel.D)
+            },
+            onFailure = { e ->
+                Klog.fl(this, "Floating Error $e", LogLevel.E)
+            },
+        )
+        */
+
+        // If you want to close when you press the Back button on the "base", insert this cord
         Klog.addBackPressedFloatingClose(this)
 
         findViewById<Button>(R.id.goMain2Button).setOnClickListener {
@@ -44,13 +52,13 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-//        testLog()
+        testLog()
     }
 
     private fun testLog() {
         CoroutineScope(Dispatchers.Main).launch {
             Klog.fl("test N", "n", LogLevel.N)
-            Klog.fl("test V", "v", LogLevel.V)
+            Klog.fl("test V", "vVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV", LogLevel.V)
             Klog.fl("test D", "d", LogLevel.D)
             Klog.fl("test I", "i", LogLevel.I)
             Klog.fl("test W", "w", LogLevel.W)
@@ -59,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 delay(1000)
                 throw RuntimeException()
             } catch (e: Exception) {
-                Klog.fl(this, "exception", e, LogLevel.E)
+                Klog.fl(this, "make exception test", e, LogLevel.E)
             }
         }
     }

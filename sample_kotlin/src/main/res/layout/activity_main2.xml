@@ -43,7 +43,7 @@
         android:id="@+id/runFloatingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Floating" />
+        android:text="Show Floating [max 3]" />
 
     <Button
         android:id="@+id/stopFloatingButton"

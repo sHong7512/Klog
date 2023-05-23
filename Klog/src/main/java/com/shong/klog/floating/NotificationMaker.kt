@@ -7,7 +7,7 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 
 internal class NotificationMaker constructor(private val context: Context) {
-    companion object{
+    companion object {
         const val SERVICE_NOTI_ID = 6231
         const val CHANNEL_ID = "SimpleActLogging"
         const val CHANNEL_NAME = "FloatingLogging"
@@ -16,7 +16,8 @@ internal class NotificationMaker constructor(private val context: Context) {
         const val SERVICE_SUB = "sub"
     }
 
-    private var notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private var notificationManager: NotificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     init {
         createNotificationChannel()
