@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/logItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/levelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minEms="1"
+        android:text="D"
+        android:textColor="#ffffff"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/keyLayout"
+        app:layout_constraintBottom_toBottomOf="@id/keyLayout" />
+
+    <TextView
+        android:id="@+id/spaceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text=" "
+        android:includeFontPadding="false"
+        android:textColor="#000000"
+        android:textSize="11sp"
+        app:layout_constraintStart_toEndOf="@id/levelTextView"
+        app:layout_constraintTop_toTopOf="@id/keyLayout"
+        app:layout_constraintBottom_toBottomOf="@id/keyLayout" />
+
+    <LinearLayout
+        android:id="@+id/keyLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@id/hyphenTextView"
+        app:layout_constraintStart_toEndOf="@id/spaceTextView"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/keyTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:maxLines="1"
+            android:text="key"
+            android:includeFontPadding="false"
+            android:textColor="#000000"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="start"
+            android:maxLines="1"
+            android:text="HH:mm:ss.SSS"
+            android:includeFontPadding="false"
+            android:textColor="#666666"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hyphenTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:text=" : "
+        android:textColor="#000000"
+        android:textSize="11sp"
+        android:includeFontPadding="false"
+        app:layout_constraintEnd_toStartOf="@id/valueTextView"
+        app:layout_constraintTop_toTopOf="@id/keyLayout"
+        app:layout_constraintBottom_toBottomOf="@id/keyLayout" />
+
+    <TextView
+        android:id="@+id/valueTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="value"
+        android:textColor="#000000"
+        android:textSize="11sp"
+        android:includeFontPadding="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
