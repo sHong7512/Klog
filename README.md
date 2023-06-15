@@ -4,6 +4,8 @@ A "custom log class" to help you develop For Android.
 
 With floating log window updated with key values.
 
+*** See "example_java" for the java example. ***
+
 ## Get Start
 
 - dependencies for download jitpack
@@ -24,7 +26,7 @@ dependencyResolutionManagement {
 
 ```
 // buld.gradle(:app)
-    implementation 'com.github.sHong7512:AARLibraryExample:0.0.2'
+    implementation 'com.github.sHong7512:Klog:0.0.3'
 ```
 
 - Call initalize() if you want to set "searchPoint" and "isShow"
@@ -67,13 +69,15 @@ dependencyResolutionManagement {
 - If you want permission With ActivityResultLauncher
 
 ```
-     Klog.reqPermissionWithLauncher(
+     Klog.reqPermission(
             componentActivity,
-            {
+            { // onAccepted
                 ...
                 Klog.runFloating(activity)
             },
-            { ... },
+            { // onDenied
+                ... 
+            },
         )
 ```
 

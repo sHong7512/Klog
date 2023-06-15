@@ -227,13 +227,14 @@ object Klog {
 
         context.startActivity(intent)
     }
-    fun reqPermissionWithLauncher(
+    fun reqPermission(
         componentActivity: ComponentActivity,
         onAccepted: (() -> Unit)?,
         onDenied: (() -> Unit)?,
     ){
         if (Settings.canDrawOverlays(componentActivity)){
             Klog.d(this, "permission already allowed")
+            onAccepted?.invoke()
             return
         }
 

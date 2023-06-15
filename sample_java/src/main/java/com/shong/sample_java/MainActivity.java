@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             return Unit.INSTANCE;
         };
         // request permission with ActivityResultLauncher
-        log.reqPermissionWithLauncher((ComponentActivity) this, onAccepted, null);
+        log.reqPermission((ComponentActivity) this, onAccepted, null);
 
         // If you want to close when you press the Back button on the "base", insert this cord
         log.addBackPressedFloatingClose((ComponentActivity) this);

@@ -33,7 +33,7 @@ class MainActivity2 : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.runFloatingButton).setOnClickListener {
-            Klog.runFloating(this, max = 3)
+            Klog.runFloating(this)
         }
 
         findViewById<Button>(R.id.stopFloatingButton).setOnClickListener {

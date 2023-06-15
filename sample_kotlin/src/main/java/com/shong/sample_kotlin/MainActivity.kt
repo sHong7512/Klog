@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         Klog.initialize("_sHong", BuildConfig.DEBUG)
 
         // request permission with ActivityResultLauncher
-        Klog.reqPermissionWithLauncher(
+        Klog.reqPermission(
             this,
             {
                 // show floating
