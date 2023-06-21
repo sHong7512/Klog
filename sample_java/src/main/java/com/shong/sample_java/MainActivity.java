@@ -3,6 +3,7 @@ package com.shong.sample_java;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.ComponentActivity;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,16 +26,15 @@ public class MainActivity extends AppCompatActivity {
         log.initialize("_sHong", BuildConfig.DEBUG);
 
         final Function0 onAccepted = (Function0) () -> {
-            // show floating
-            log.runFloating(this);
+            // show floating simple
+//            log.runFloating(this);
 
-            /* if you want to set other options
             final Function1 onFailure = (Function1) (str) -> {
                 // ...
                 return Unit.INSTANCE;
             };
+            // show floating with options
             log.runFloating(this, true, 10, true, onFailure);
-            */
 
             return Unit.INSTANCE;
         };
@@ -47,20 +47,34 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.goMain2Button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                log.f("${(it as Button).text}Button", "clicked!");
+                log.f(((Button)view).getText() +"Button", "clicked!");
                 startActivity(new Intent(getApplicationContext(), MainActivity2.class));
             }
         });
         findViewById(R.id.goMain2FinishButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                log.f("${(it as Button).text}Button", "clicked!");
+                log.f(((Button)view).getText() + "Button", "clicked!");
                 startActivity(new Intent(getApplicationContext(), MainActivity2.class));
                 finish();
             }
         });
 
-        new LogThread().start();
+        findViewById(R.id.goMain2FinishButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                log.f(((Button)view).getText() + "Button", "clicked!");
+                startActivity(new Intent(getApplicationContext(), MainActivity2.class));
+                finish();
+            }
+        });
+
+        findViewById(R.id.testLogButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new LogThread().start();
+            }
+        });
     }
 
     private class LogThread extends Thread {
@@ -78,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException();
             } catch (Exception e) {
                 log.fl(this, "make exception test", e, LogLevel.E);
-//                e.printStackTrace();
             }
         }
     }

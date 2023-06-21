@@ -25,24 +25,22 @@ class MainActivity : AppCompatActivity() {
         Klog.reqPermission(
             this,
             {
-                // show floating
-                Klog.runFloating(this)
-                /* if you want to set other options
+                // show floating simple
+//                Klog.runFloating(this)
+
+                // show floating with options
                 Klog.runFloating(
                     activity = this,
                     autoStop = true,
-                    max = 5,
+                    max = 10,
                     withActivityLog = true,
                     onFailure = { e ->
                         Klog.fl(this, "Floating Error $e", LogLevel.E)
                     },
                 )
-                */
             },
             { Klog.e(this, "Permission Denied!!")},
         )
-
-
 
         // If you want to close when you press the Back button on the "base", insert this cord
         Klog.addBackPressedFloatingClose(this)
@@ -58,7 +56,9 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        testLog()
+        findViewById<Button>(R.id.testLogButton).setOnClickListener {
+            testLog()
+        }
     }
 
     private fun testLog() {

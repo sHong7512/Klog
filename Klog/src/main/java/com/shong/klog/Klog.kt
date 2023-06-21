@@ -345,6 +345,7 @@ object Klog {
         actLogJob?.cancel()
     }
 
+    // TODO: require Test
     private fun activityFlow(context: Context, searchMillis: Long) = flow<Map<String, String>> {
         val lastLog = mutableMapOf<String, String>()
 
@@ -356,27 +357,42 @@ object Klog {
             }
         }
 
+        var topActStacks: MutableMap<Int, String> = mutableMapOf()
+
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         while (true) {
             for (i in 0 until manager.appTasks.size) {
                 val taskInfo = manager.appTasks[i].taskInfo
                 val task = if (manager.appTasks.size > 1) "<$i>" else ""
 
-                updateLog(
-                    "TopActivity$task",
-                    "${taskInfo.topActivity?.shortClassName}"
-                )
-                updateLog(
-                    "BaseActivity$task",
-                    "${taskInfo.baseActivity?.shortClassName}"
-                )
-                updateLog(
-                    "Activities$task",
-                    "${taskInfo.numActivities}"
-                )
+                updateLog("TopActivity$task", "${taskInfo.topActivity?.shortClassName}")
+                updateLog("BaseActivity$task", "${taskInfo.baseActivity?.shortClassName}")
+                updateLog("Activities$task", "${taskInfo.numActivities}")
+                if(taskInfo.topActivity?.shortClassName != null){
+                    topActStacks[taskInfo.numActivities] = taskInfo.topActivity!!.shortClassName
+                    val buf = mutableMapOf<Int, String>()
+
+                    for(tta in topActStacks){
+                        if(tta.key <= taskInfo.numActivities){
+                            buf[tta.key] = tta.value
+                        }
+                    }
+                    topActStacks = buf
+
+                    var str = ""
+                    val list = topActStacks.values.toList()
+                    for(i in list.size - 1 downTo  0){
+                        str += if(i == 0) list[i] else "${list[i]}\n"
+                    }
+                    updateLog("Stacks$task", str)
+                }
             }
 
             if (isUpdated) {
+                removeContainFloatLog("TopActivity<")
+                removeContainFloatLog("BaseActivity<")
+                removeContainFloatLog("Activities<")
+                removeContainFloatLog("Stacks<")
                 for (l in lastLog) {
                     Klog.f(l.key, l.value)
                 }

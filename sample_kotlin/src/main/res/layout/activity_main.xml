@@ -20,4 +20,10 @@
         android:layout_height="wrap_content"
         android:text="Go MainActivity2 With Finish" />
 
+    <Button
+        android:id="@+id/testLogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="show Test Log" />
+
 </LinearLayout>

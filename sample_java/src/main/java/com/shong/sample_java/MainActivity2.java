@@ -26,7 +26,7 @@ public class MainActivity2 extends AppCompatActivity {
         findViewById(R.id.makeLogButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                log.f("${System.currentTimeMillis()}", "test log ${System.currentTimeMillis()}");
+                log.f("" + System.currentTimeMillis(), "test log " + System.currentTimeMillis());
             }
         });
 

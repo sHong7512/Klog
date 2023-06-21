@@ -4,7 +4,7 @@ A "custom log class" to help you develop For Android.
 
 With floating log window updated with key values.
 
-*** See "example_java" for the java example. ***
+*** See "sample_java" for the java example. ***
 
 ## Get Start
 
@@ -26,7 +26,7 @@ dependencyResolutionManagement {
 
 ```
 // buld.gradle(:app)
-    implementation 'com.github.sHong7512:Klog:0.0.3'
+    implementation 'com.github.sHong7512:Klog:0.0.6'
 ```
 
 - Call initalize() if you want to set "searchPoint" and "isShow"
@@ -81,7 +81,7 @@ dependencyResolutionManagement {
         )
 ```
 
-- If you want to close when you press the Back button on the "BaseActivity", insert this cord
+- If you want to close when you press the Back button on the "BaseActivity", insert this code
 
 ```
     Klog.addBackPressedFloatingClose(componentActivity)
