@@ -26,7 +26,7 @@ dependencyResolutionManagement {
 
 ```
 // buld.gradle(:app)
-    implementation 'com.github.sHong7512:Klog:0.0.6'
+    implementation 'com.github.sHong7512:Klog:0.0.7'
 ```
 
 - Call initalize() if you want to set "searchPoint" and "isShow"
