@@ -54,10 +54,10 @@ dependencyResolutionManagement {
 
 ### Floating Log
 
-- Put the code in your activity (This function includes an permission request)
+- Put the code in your class (This function includes an permission request)
 
 ```
-    Klog.runFloating(activity)
+    Klog.runFloating(context)
 ```
 
 - If you want permission
@@ -73,7 +73,7 @@ dependencyResolutionManagement {
             componentActivity,
             { // onAccepted
                 ...
-                Klog.runFloating(activity)
+                Klog.runFloating(context)
             },
             { // onDenied
                 ... 
@@ -90,7 +90,7 @@ dependencyResolutionManagement {
 - If you want to stop
 
 ```
-    Klog.stopFloating(acivity)
+    Klog.stopFloating(context)
 ```
 
 - Show Log at FLoating Window
@@ -117,15 +117,13 @@ dependencyResolutionManagement {
 
 ```
 fun runFloating(
-        activity: activity,
+        context: Context,
         autoStop: Boolean = AUTO_STOP_BASE,
         max: Int = MAX_BASE,
         withActivityLog: Boolean = false,
         onFailure: ((String?) -> Unit)?,
     ) 
 ```
-
-- activity : ComponentActivity,
 
 - autoStop : Automatic shutdown when no activity(task) is active
 

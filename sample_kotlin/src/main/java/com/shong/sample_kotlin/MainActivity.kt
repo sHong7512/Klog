@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
                 // show floating with options
                 Klog.runFloating(
-                    activity = this,
+                    context = this,
                     autoStop = true,
                     max = 10,
                     withActivityLog = true,

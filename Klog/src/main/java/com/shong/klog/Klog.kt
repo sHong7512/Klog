@@ -257,12 +257,23 @@ object Klog {
         resultLauncherOverlay.launch(intent)
     }
 
-    fun runFloating(activity: Activity) {
-        runFloating(activity, AUTO_STOP_BASE, MAX_BASE, false, { _ -> })
+    fun runFloating(context: Context) {
+        if (isShow) {
+            try {
+                if (Settings.canDrawOverlays(context)) {
+                    startFloating(context)
+                    Klog.d(this, "show Floating Succeed")
+                } else {
+                    Klog.e(this, "Must allowed Overlay Permission")
+                }
+            } catch (e: Exception) {
+                Klog.e(this, "Occur Floating Error :  $e")
+            }
+        }
     }
 
     fun runFloating(
-        activity: Activity,
+        context: Context,
         autoStop: Boolean = AUTO_STOP_BASE,
         max: Int = MAX_BASE,
         withActivityLog: Boolean = false,
@@ -270,8 +281,8 @@ object Klog {
     ) {
         if (isShow) {
             try {
-                if (Settings.canDrawOverlays(activity)) {
-                    startFloating(activity, autoStop, max, withActivityLog)
+                if (Settings.canDrawOverlays(context)) {
+                    startFloating(context, autoStop, max, withActivityLog)
                     Klog.d(this, "show Floating Succeed")
                 } else {
                     Klog.e(this, "Must allowed Overlay Permission")
@@ -282,6 +293,54 @@ object Klog {
                 onFailure?.invoke("Occur Floating Error :  $e")
             }
         }
+    }
+
+    private fun startFloating(context: Context){
+        _logFlow = MutableSharedFlow(
+            replay = MAX_BASE,
+            extraBufferCapacity = MAX_BASE,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
+        logFlow = _logFlow!!.asSharedFlow()
+
+        val intent = Intent(context, FloatingService::class.java).apply {
+            putExtra("autoStop", false)
+            putExtra("max", MAX_BASE)
+        }
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+    }
+
+    private fun startFloating(
+        context: Context,
+        autoStop: Boolean,
+        max: Int,
+        withActivityLog: Boolean
+    ) {
+        _logFlow = MutableSharedFlow(
+            replay = max,
+            extraBufferCapacity = max,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
+        logFlow = _logFlow!!.asSharedFlow()
+
+        val intent = Intent(context, FloatingService::class.java).apply {
+            putExtra("autoStop", autoStop)
+            putExtra("max", max)
+        }
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+
+        if (withActivityLog) addActivityLog(context, 100)
+        else stopActivityLog()
     }
 
     fun addBackPressedFloatingClose(activity: ComponentActivity) {
@@ -298,39 +357,11 @@ object Klog {
         }
     }
 
-    fun stopFloating(activity: Activity) {
-        val intent = Intent(activity, FloatingService::class.java)
-        activity.stopService(intent)
+    fun stopFloating(context: Context) {
+        val intent = Intent(context, FloatingService::class.java)
+        context.stopService(intent)
         stopActivityLog()
         Klog.d(this, "stopFloating")
-    }
-
-    private fun startFloating(
-        activity: Activity,
-        autoStop: Boolean,
-        max: Int,
-        withActivityLog: Boolean
-    ) {
-        _logFlow = MutableSharedFlow(
-            replay = max,
-            extraBufferCapacity = max,
-            onBufferOverflow = BufferOverflow.DROP_OLDEST
-        )
-        logFlow = _logFlow!!.asSharedFlow()
-
-        val intent = Intent(activity, FloatingService::class.java).apply {
-            putExtra("autoStop", autoStop)
-            putExtra("max", max)
-        }
-
-        if (Build.VERSION.SDK_INT >= 26) {
-            activity.startForegroundService(intent)
-        } else {
-            activity.startService(intent)
-        }
-
-        if (withActivityLog) addActivityLog(activity, 100)
-        else stopActivityLog()
     }
 
     private var actLogJob: Job? = null
