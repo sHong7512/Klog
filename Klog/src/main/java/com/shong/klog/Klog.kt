@@ -28,6 +28,10 @@ import kotlinx.coroutines.flow.*
  * @since 2023.05.23
  * @see Log, Flow, WindowManager, ForegroundService
  */
+
+inline val Any.tag: String get() = "${this::class.java.simpleName}_sHong"
+fun Any.log(msg: String) = Log.d(this.tag, msg)
+
 object Klog {
     private var isShow = true
     internal const val AUTO_STOP_BASE = true
